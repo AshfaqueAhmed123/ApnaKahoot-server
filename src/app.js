@@ -23,12 +23,15 @@ const io = new Server(httpServer, {
 
  // routes
 app.get("/",(req,res)=>{
-  res.json({msg:"hello"})
+  res.json({msg:"app is running"})
 })
-
 import {userRouter} from "./routes/exports.js"
+import {quizRouter} from "./routes/exports.js"
 app.use("/api/v1/user", userRouter)
+app.use("/api/v1/quiz", quizRouter)
 
+
+// R/T stuff
 io.on("connection", (socket) => {
   console.log(socket.id.slice(0,3))
 });
