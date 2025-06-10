@@ -21,9 +21,13 @@ const io = new Server(httpServer, {
   }
  });
 
+ // routes
 app.get("/",(req,res)=>{
   res.json({msg:"hello"})
 })
+
+import {userRouter} from "./routes/exports.js"
+app.use("/api/v1/user", userRouter)
 
 io.on("connection", (socket) => {
   console.log(socket.id.slice(0,3))

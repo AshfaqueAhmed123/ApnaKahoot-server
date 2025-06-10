@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "apnaKahoot",
+      "name": "apnaKahoot-server",
       "dependencies": {
         "bcrypt": "^6.0.0",
         "cloudinary": "^2.6.1",
