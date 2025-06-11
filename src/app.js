@@ -25,10 +25,10 @@ const io = new Server(httpServer, {
 app.get("/",(req,res)=>{
   res.json({msg:"app is running"})
 })
-import {userRouter} from "./routes/exports.js"
-import {quizRouter} from "./routes/exports.js"
+import {userRouter,quizRouter,questionRouter} from "./routes/exports.js"
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/quiz", quizRouter)
+app.use("/api/v1/question", questionRouter)
 
 
 // R/T stuff

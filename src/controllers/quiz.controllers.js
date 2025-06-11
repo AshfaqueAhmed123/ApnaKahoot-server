@@ -1,6 +1,7 @@
 import {Quiz} from "../models/quiz.model.js"
 import {ApiError,ApiResponse} from "../config/config.js"
 import {v4 as uuid} from "uuid"
+import req from "express/lib/request.js";
 
 const create = async (req,res) => {
     try {
@@ -79,4 +80,38 @@ const remove = async (req,res) => {
     }
 }
 
-export {create,remove}
+const update = (req,res) => {
+    try {
+        
+    } catch (error) {
+        return res.status(error?.status).json(
+            new ApiError(error?.status,error?.message)
+        )
+    }
+}
+
+const fetchQuizById = async(req,res) => {
+    try {
+        const quizId = req.params.quizId;
+        if(!quizId){
+            return res.status(400).json(
+                new ApiError(400,"quizId is required")
+            )
+        }
+        const quiz = await Quiz.findById(quizId);
+        if(!quiz){
+            return res.status(404).json(
+                new ApiError(404,"quiz does not exists with this id")
+            )
+        }
+        return res.status(200).json(
+            new ApiResponse(200,"quiz fecthed", quiz)
+        )
+    } catch (error) {
+        return res.status(error?.status).json(
+            new ApiError(error?.status,error?.message)
+        )
+    }
+}
+
+export {create,remove,update,fetchQuizById}
