@@ -58,7 +58,34 @@ const fetchById = async (req, res) => {
 
 const update = async (req,res) => {
     try {
-        
+        const questionId = req.params.questionId;
+        const {questionText,answers,correctAnswer,questionTime,points} = req.body;
+        if(!questionId || [questionText,answers,correctAnswer,questionTime,points].some((field)=>field.trim === "")){
+            return res.status(400).json(
+                new ApiError(400,"all fields are required")
+            )
+        }
+        const updated = await Question.findByIdAndUpdate(questionId,{
+            $set:{
+                questionText:questionText,
+                answers:answers,
+                correctAnswer:correctAnswer,
+                questionTime:questionTime,
+                points:points
+            }
+        })
+        if(!updated){
+            return res.status(500).json(
+                new ApiError(500,"something went wrong while updating question")
+            )
+        }
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                "question updated",
+                updated
+            )
+        )
     } catch (error) {
         return res.status(error?.status).json(
             new ApiError(error?.status,error?.message)

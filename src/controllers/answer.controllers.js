@@ -57,7 +57,37 @@ const fetchById = async (req,res) => {
 
 const update = async (req,res) => {
     try {
-        
+        // TODO : add answerImage in edit options 
+        const answerId = req.params.answerId;
+        const {answerText,isCorrect} = req.body;
+        if(!answerId || !answerText || !isCorrect){
+            return res.status(400).json(
+                new ApiError(400,"all fields are required")
+            )
+        }
+        const updated = await Answer.findByIdAndUpdate(answerId,
+            {
+                $set: {
+                    answerText : answerText,
+                    isCorrect : isCorrect
+                }
+            },
+            { new: true }
+        )
+
+        if(!updated){
+            return res.status(500).json(
+                new ApiError(500,"something went wrong while updating answer")
+            )
+        }
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                "answer updated",
+                updated
+            )
+        )
     } catch (error) {
         return res.status(error?.status).json(
             new ApiError(error?.status,error?.message)

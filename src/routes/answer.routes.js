@@ -8,4 +8,4 @@ const router = Router();
 router.route("/").post(verifyUser,createAnswer)
 router.route("/:answerId").get(verifyUser,fetchAnswerById).patch(verifyUser,updateAnswer).delete(verifyUser,removeAnswer)
 
-export default router;
+export {router};

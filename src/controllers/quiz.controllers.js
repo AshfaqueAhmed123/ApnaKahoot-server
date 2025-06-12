@@ -1,7 +1,6 @@
 import {Quiz} from "../models/quiz.model.js"
 import {ApiError,ApiResponse} from "../config/config.js"
 import {v4 as uuid} from "uuid"
-import req from "express/lib/request.js";
 
 const create = async (req,res) => {
     try {
@@ -25,8 +24,8 @@ const create = async (req,res) => {
             PIN : uuid(),
             title,
             description,
-            previewImage,
-            backgroundImage,
+            // previewImage,
+            // backgroundImage,
             questions,
             owner : userId,
             isLive : false,
@@ -80,9 +79,35 @@ const remove = async (req,res) => {
     }
 }
 
-const update = (req,res) => {
+const update = async (req,res) => {
     try {
-        
+        const quizId = req.params.quizId;
+        // TODO: add background and preview images edit options 
+        const {title,description,questions} = req.body;
+        if(!quizId || [title,description,questions].some((field)=>field.trim === "")){
+            return res.status(400).json(
+                new ApiError(400,"all fields are required")
+            )
+        }
+        const updated = await Quiz.findByIdAndUpdate(quizId,{
+            $set:{
+                title:title,
+                description:description,
+                questions:questions
+            }
+        })
+        if(!updated){
+            returnres.status(500).json(
+                new ApiError(500,"something went wrong while updating quiz")
+            )
+        }
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                "quiz updated",
+                updated
+            )
+        )
     } catch (error) {
         return res.status(error?.status).json(
             new ApiError(error?.status,error?.message)

@@ -40,19 +40,19 @@ const register = async (req, res) => {
             )
         }
 
-        const profilePictureLocalPath = req.files?.profilePicture[0]?.path;
+        // const profilePictureLocalPath = req.files?.profilePicture[0]?.path;
 
-        if (!profilePictureLocalPath) {
-            return res.status(400).json(
-                new ApiError(400, "profile picture file is required")
-            )
-        }
+        // if (!profilePictureLocalPath) {
+            // return res.status(400).json(
+                // new ApiError(400, "profile picture file is required")
+            // )
+        // }
 
-        const profilePicture = await uploadOnCloudinary(profilePictureLocalPath)
+        // const profilePicture = await uploadOnCloudinary(profilePictureLocalPath)
 
         const user = await User.create({
             fullName,
-            profilePicture: profilePicture?.url || "",
+            // profilePicture: profilePicture?.url || "",
             email,
             password,
             username: username.toLowerCase()
