@@ -5,6 +5,6 @@ import {verifyUser} from "../middlewares/exports.js"
 const router = Router();
 
 router.route("/:userId/create").post(verifyUser,createQuiz)
-router.route("/:quizId").delete(verifyUser,deleteQuiz).patch(updateQuiz).get(fetchQuizById)
+router.route("/:quizId").delete(verifyUser,deleteQuiz).patch(verifyUser,updateQuiz).get(verifyUser,fetchQuizById)
 
 export {router}
