@@ -6,6 +6,10 @@ import {create as createQuestion,fetchById as fetchQuestionById,update as update
 
 import {create as createAnswer, fetchById as fetchAnswerById, update as updateAnswer, remove as removeAnswer} from "./answer.controllers.js"
 
+import {live as liveQuiz, remove as removeLiveQuiz, fetchById as fetchLiveQuizById} from "./liveQuiz.controllers.js"
+
+import {join as joinPlayer} from "./player.controllers.js"
+
 export {
     // user
     register,login,logout,changePassword,updateAccount,refreshAccessToken,
@@ -14,5 +18,9 @@ export {
     // question
     createQuestion,fetchQuestionById,updateQuestion,removeQuestion,
     // Answer
-    createAnswer,fetchAnswerById,updateAnswer,removeAnswer
+    createAnswer,fetchAnswerById,updateAnswer,removeAnswer,
+    // live Quiz
+    liveQuiz,removeLiveQuiz,fetchLiveQuizById,
+    // player
+    joinPlayer
 }

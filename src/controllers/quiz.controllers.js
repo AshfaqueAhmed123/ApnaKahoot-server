@@ -19,7 +19,6 @@ const create = async (req,res) => {
             )
         }
         const quiz = await Quiz.create({
-            PIN : Math.floor(Math.random()*100000000000),
             title,
             description,
             // previewImage,
@@ -28,7 +27,6 @@ const create = async (req,res) => {
             owner : userId,
             isLive : false,
             isParticipatingAllowed : false,
-            participatants : []
         })
         if(!quiz){
             return res.status(500).json(

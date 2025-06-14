@@ -1,10 +1,6 @@
 import mongoose,{Schema,model} from "mongoose"
 
 const quizSchema = new Schema({
-    PIN:{
-        type:Number,
-        required:true,
-    },
     title:{
         type:String,
         required:true,
@@ -36,10 +32,6 @@ const quizSchema = new Schema({
         type:Boolean,
         required:true,
     },
-    participatants:[{
-        type:Schema.Types.ObjectId,
-        ref:"Participatant"
-    }],
 },{
     timestamps:true
 })

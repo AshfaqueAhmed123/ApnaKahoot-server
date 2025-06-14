@@ -32,9 +32,4 @@ app.use("/api/v1/question", questionRouter)
 app.use("/api/v1/answer",answerRouter)
 
 
-// R/T stuff
-io.on("connection", (socket) => {
-  console.log(socket.id.slice(0,3))
-});
-
-export {httpServer}
+export {httpServer, io}
