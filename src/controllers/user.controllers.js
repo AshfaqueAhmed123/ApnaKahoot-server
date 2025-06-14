@@ -1,5 +1,6 @@
 import { User } from "../models/exports.js";
 import { ApiError, ApiResponse, uploadOnCloudinary } from "../config/config.js";
+import jwt from "jsonwebtoken"
 
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
@@ -22,7 +23,7 @@ const register = async (req, res) => {
         const { username, email, fullName, password } = req.body;
         if (
             [fullName, email, username, password].some(
-                (field) => field?.trim() === ""
+                (field) => field === ""
             )
         ) {
             return res.status(400).json(
@@ -55,7 +56,7 @@ const register = async (req, res) => {
             // profilePicture: profilePicture?.url || "",
             email,
             password,
-            username: username.toLowerCase()
+            username: username?.toLowerCase()
         })
 
 
@@ -75,12 +76,12 @@ const register = async (req, res) => {
 
     } catch (error) {
         return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+            .status(error?.status || 400)
+            .json(new ApiError(error?.status || 400, error?.message));
     }
 };
 
-const login = async (req, res) => {
+const login = async (req,res) => {    
     try {
         const { email, username, password } = req.body
         if (!username && !email) {
@@ -122,9 +123,7 @@ const login = async (req, res) => {
         )
 
     } catch (error) {
-        return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+        return res.status(error?.status || 400).json(new ApiError(error?.status || 400, error?.message));
     }
 }
 
@@ -144,12 +143,12 @@ const logout = async (req, res) => {
         return res.status(200).json(new ApiResponse(200, "User logged Out"))
     } catch (error) {
         return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+            .status(error?.status || 400)
+            .json(new ApiError(error?.status || 400, error?.message));
     }
 }
 
-const changePassword = async () => {
+const changePassword = async (req,res) => {
     try {
         const { oldPassword, newPassword } = req.body
 
@@ -172,12 +171,12 @@ const changePassword = async () => {
             .json(new ApiResponse(200, "Password changed successfully"))
     } catch (error) {
         return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+            .status(error?.status || 400)
+            .json(new ApiError(error?.status || 400, error?.message));
     }
 }
 
-const updateAccount = async () => {
+const updateAccount = async (req,res) => {
     try {
         const { fullName, email } = req.body
 
@@ -204,21 +203,21 @@ const updateAccount = async () => {
             .json(new ApiResponse(200, "Account details updated successfully", user))
     } catch (error) {
         return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+            .status(error?.status || 400)
+            .json(new ApiError(error?.status || 400, error?.message));
     }
 }
 
-const refreshAccessToken = async () => {
+const refreshAccessToken = async (req,res) => {
     try {
-        const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
-        if (!incomingRefreshToken) {
+        const {refreshToken} = req.body
+        if (!refreshToken) {
             return res.status(401).json(
                 new ApiError(401, "unauthorized request")
             )
         }
         const decodedToken = jwt.verify(
-            incomingRefreshToken,
+            refreshToken,
             process.env.REFRESH_TOKEN_SECRET
         )
 
@@ -230,7 +229,7 @@ const refreshAccessToken = async () => {
             )
         }
 
-        if (incomingRefreshToken !== user?.refreshToken) {
+        if (refreshToken !== user?.refreshToken) {
             return res.status(401).json(
                 new ApiError(401, "Refresh token is expired or used")
             )
@@ -250,8 +249,8 @@ const refreshAccessToken = async () => {
             )
     } catch (error) {
         return res
-            .status(error?.status)
-            .json(new ApiError(error?.status, error?.message));
+            .status(error?.status || 400)
+            .json(new ApiError(error?.status || 400, error?.message));
     }
 }
 

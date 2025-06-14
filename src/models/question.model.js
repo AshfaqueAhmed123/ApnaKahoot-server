@@ -2,7 +2,7 @@ import mongoose,{Schema,model} from "mongoose";
 
 const questionSchema = new Schema({
     parentQuiz:{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:"Quiz"
     },
     questionText:{
@@ -12,11 +12,7 @@ const questionSchema = new Schema({
         type:String,
     },
     answers:[{
-        type:mongoose.SchemaTypes.ObjectId,
-        ref:"Answer"
-    }],
-    correctAnswer:[{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:"Answer"
     }],
     questionTime:{

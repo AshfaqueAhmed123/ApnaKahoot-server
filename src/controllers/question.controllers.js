@@ -4,7 +4,7 @@ import {ApiError,ApiResponse} from "../config/config.js"
 const create = async (req,res) => {
     try {
         const {parentQuiz,questionText,answers,correctAnswer,questionTime,points} = req.body;
-        if([parentQuiz,questionText,answers,correctAnswer,questionTime,points].some((field)=>field.trim === "")){
+        if([parentQuiz,questionText,answers,questionTime,points].some((field)=> field === "")){
             return res.status(400).json(
                 new ApiError(400,"all fields are required")
             )
@@ -13,7 +13,6 @@ const create = async (req,res) => {
             parentQuiz,
             questionText,
             answers,
-            correctAnswer,
             questionTime,
             points
         })
@@ -26,8 +25,8 @@ const create = async (req,res) => {
             new ApiResponse(200,"question created", question)
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -40,7 +39,7 @@ const fetchById = async (req, res) => {
                 new ApiError(400, "questionId is required")
             )
         }
-        const question = await Question.findById(questionId);
+        const question = await Question.findById(questionId).populate("answers");
         if (!question) {
             return res.status(404).json(
                 new ApiError(404, "question does not exists with this id")
@@ -50,8 +49,8 @@ const fetchById = async (req, res) => {
             new ApiResponse(200, "question fecthed", question)
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status, error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400, error?.message)
         )
     }
 }
@@ -60,7 +59,7 @@ const update = async (req,res) => {
     try {
         const questionId = req.params.questionId;
         const {questionText,answers,correctAnswer,questionTime,points} = req.body;
-        if(!questionId || [questionText,answers,correctAnswer,questionTime,points].some((field)=>field.trim === "")){
+        if(!questionId || [questionText,answers,correctAnswer,questionTime,points].some((field)=>field === "")){
             return res.status(400).json(
                 new ApiError(400,"all fields are required")
             )
@@ -87,8 +86,8 @@ const update = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -115,8 +114,8 @@ const remove = async (req, res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status, error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400, error?.message)
         )
     }
 }

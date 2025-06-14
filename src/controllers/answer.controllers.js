@@ -4,7 +4,7 @@ import {ApiError,ApiResponse} from "../config/config.js"
 const create = async (req,res) => {
     try {
         const { question, answerText, isCorrect, points } = req.body;
-        if ([question, answerText, isCorrect].some((field) => field.trim === "")) {
+        if ([question, answerText, isCorrect].some((field) => field === "")) {
             return res.status(400).json(
                 new ApiError(400, "all fields are required")
             )
@@ -25,8 +25,8 @@ const create = async (req,res) => {
             new ApiResponse(200, "answer created", answer)
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -49,8 +49,8 @@ const fetchById = async (req,res) => {
             new ApiResponse(200, "answer fecthed", answer)
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -89,8 +89,8 @@ const update = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -117,8 +117,8 @@ const remove = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }

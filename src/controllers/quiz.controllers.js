@@ -1,6 +1,5 @@
 import {Quiz} from "../models/quiz.model.js"
 import {ApiError,ApiResponse} from "../config/config.js"
-import {v4 as uuid} from "uuid"
 
 const create = async (req,res) => {
     try {
@@ -11,7 +10,6 @@ const create = async (req,res) => {
                 new ApiError(400,"userId, title and questions are required")
             )
         }
-        // implement if quiz exists with same title in the user's account
         const quizExixts = await Quiz.findOne({
             $and : [{title}, {owner:userId}]
         });
@@ -21,7 +19,7 @@ const create = async (req,res) => {
             )
         }
         const quiz = await Quiz.create({
-            PIN : uuid(),
+            PIN : Math.floor(Math.random()*100000000000),
             title,
             description,
             // previewImage,
@@ -45,8 +43,8 @@ const create = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -73,8 +71,8 @@ const remove = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -84,7 +82,7 @@ const update = async (req,res) => {
         const quizId = req.params.quizId;
         // TODO: add background and preview images edit options 
         const {title,description,questions} = req.body;
-        if(!quizId || [title,description,questions].some((field)=>field.trim === "")){
+        if(!quizId || [title,description,questions].some((field)=>field === "")){
             return res.status(400).json(
                 new ApiError(400,"all fields are required")
             )
@@ -97,7 +95,7 @@ const update = async (req,res) => {
             }
         })
         if(!updated){
-            returnres.status(500).json(
+            return res.status(500).json(
                 new ApiError(500,"something went wrong while updating quiz")
             )
         }
@@ -109,8 +107,8 @@ const update = async (req,res) => {
             )
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }
@@ -123,7 +121,7 @@ const fetchQuizById = async(req,res) => {
                 new ApiError(400,"quizId is required")
             )
         }
-        const quiz = await Quiz.findById(quizId);
+        const quiz = await Quiz.findById(quizId).populate("questions");
         if(!quiz){
             return res.status(404).json(
                 new ApiError(404,"quiz does not exists with this id")
@@ -133,8 +131,8 @@ const fetchQuizById = async(req,res) => {
             new ApiResponse(200,"quiz fecthed", quiz)
         )
     } catch (error) {
-        return res.status(error?.status).json(
-            new ApiError(error?.status,error?.message)
+        return res.status(error?.status || 400).json(
+            new ApiError(error?.status || 400,error?.message)
         )
     }
 }

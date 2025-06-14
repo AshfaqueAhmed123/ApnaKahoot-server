@@ -4,7 +4,7 @@ import {createQuestion,fetchQuestionById,updateQuestion,removeQuestion} from "..
 
 const router = Router();
 
-router.route("/").post(verifyUser,createQuestion);
-router.route("/questionId").get(verifyUser,fetchQuestionById).patch(verifyUser,updateQuestion).delete(verifyUser,removeQuestion)
+router.route("/").post(createQuestion);
+router.route("/:questionId").get(fetchQuestionById).patch(updateQuestion).delete(removeQuestion)
 
 export {router}

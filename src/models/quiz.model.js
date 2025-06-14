@@ -19,12 +19,12 @@ const quizSchema = new Schema({
         type:String // cloudinary url
     },
     questions:[{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:"Question",
         required:true
     }],
     owner:{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:"User",
         required:true
     },
@@ -37,7 +37,7 @@ const quizSchema = new Schema({
         required:true,
     },
     participatants:[{
-        type:mongoose.SchemaTypes.ObjectId,
+        type:Schema.Types.ObjectId,
         ref:"Participatant"
     }],
 },{

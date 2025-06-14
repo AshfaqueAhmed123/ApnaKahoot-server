@@ -5,7 +5,7 @@ import { remove } from "../controllers/quiz.controllers.js";
 
 const router = Router();
 
-router.route("/").post(verifyUser,createAnswer)
-router.route("/:answerId").get(verifyUser,fetchAnswerById).patch(verifyUser,updateAnswer).delete(verifyUser,removeAnswer)
+router.route("/").post(createAnswer)
+router.route("/:answerId").get(fetchAnswerById).patch(updateAnswer).delete(removeAnswer)
 
 export {router};
