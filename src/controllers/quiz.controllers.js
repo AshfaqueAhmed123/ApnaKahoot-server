@@ -119,7 +119,7 @@ const fetchQuizById = async(req,res) => {
                 new ApiError(400,"quizId is required")
             )
         }
-        const quiz = await Quiz.findById(quizId).populate("questions");
+        const quiz = await Quiz.findById(quizId).populate(["questions"]);
         if(!quiz){
             return res.status(404).json(
                 new ApiError(404,"quiz does not exists with this id")

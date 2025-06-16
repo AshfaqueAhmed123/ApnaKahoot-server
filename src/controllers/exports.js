@@ -8,7 +8,7 @@ import {create as createAnswer, fetchById as fetchAnswerById, update as updateAn
 
 import {live as liveQuiz, remove as removeLiveQuiz, fetchById as fetchLiveQuizById} from "./liveQuiz.controllers.js"
 
-import {join as joinPlayer} from "./player.controllers.js"
+import {join as joinPlayer, remove as removePlayer} from "./player.controllers.js"
 
 export {
     // user
@@ -22,5 +22,5 @@ export {
     // live Quiz
     liveQuiz,removeLiveQuiz,fetchLiveQuizById,
     // player
-    joinPlayer
+    joinPlayer,removePlayer
 }

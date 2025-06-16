@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors"
 import { createServer } from "http";
 import { Server } from "socket.io";
-import {CORS_ORIGIN} from "./config/config.js"
+import {CORS_ORIGIN,handleNotFound} from "./config/config.js"
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 const httpServer = createServer(app);
 const io = new Server(httpServer, { 
   cors:{
-    origin:"http://localhost:5173"
+    origin:CORS_ORIGIN
   }
  });
 
@@ -31,5 +31,6 @@ app.use("/api/v1/quiz", quizRouter)
 app.use("/api/v1/question", questionRouter)
 app.use("/api/v1/answer",answerRouter)
 
+app.use(handleNotFound)
 
 export {httpServer, io}
